@@ -1,12 +1,13 @@
 {
   "name": "pg-practice-with-express",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
     "start": "node dist/server.js",
     "deploy": "nhb-build && vercel --prod",
     "build": "nhb-build",
+    "migrate": "prisma migrate dev",
     "format": "nhb-format",
     "lint": "nhb-lint",
     "fix": "nhb-fix",

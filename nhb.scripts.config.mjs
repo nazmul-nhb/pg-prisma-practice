@@ -63,9 +63,9 @@ function copyFolder(srcDir = 'src/public', destDir = 'dist/public') {
 		cpSync(srcDir, destDir, { recursive: true });
 		console.info(
 			ansiColor('blackBright').toANSI('│\n') +
-			ansiColor('greenBright').toANSI(
-				`◇  ✅ Contents from ${bgGray(` ${srcDir} `)} copied to ${bgGray(` ${destDir} `)} successfully!`
-			)
+				ansiColor('greenBright').toANSI(
+					`◇  ✅ Contents from ${bgGray(` ${srcDir} `)} copied to ${bgGray(` ${destDir} `)} successfully!`
+				)
 		);
 	} catch (err) {
 		console.error(ansiColor('redBright').toANSI(`🛑 Error copying folder: ${err}`));

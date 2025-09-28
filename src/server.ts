@@ -1,5 +1,4 @@
 import configs from '@/configs';
-import { connectDB } from '@/configs/db';
 import type { ExceptionSignal } from '@/types';
 import { createServer, type Server } from 'http';
 import { convertStringCase } from 'nhb-toolbox';
@@ -10,9 +9,6 @@ let server: Server;
 
 const bootStrap = async () => {
 	try {
-		// Connect to DB
-		await connectDB();
-
 		// Create server with Node.js so that it can later be integrated with socket(s)
 		server = createServer(app);
 

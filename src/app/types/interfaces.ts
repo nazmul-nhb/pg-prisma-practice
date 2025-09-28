@@ -4,29 +4,6 @@ import type { JwtPayload } from 'jsonwebtoken';
 import type { LooseLiteral } from 'nhb-toolbox/utils/types';
 import type Mail from 'nodemailer/lib/mailer';
 
-export interface IDuplicateError {
-	errorResponse: {
-		index: number;
-		code: number;
-		errmsg?: string;
-		message?: string;
-		keyPattern: Record<string, number>;
-		keyValue: Record<string, string>;
-	};
-	index: number;
-	code: number;
-	keyPattern?: Record<string, number>;
-	keyValue?: Record<string, string>;
-	writeErrors?: Array<{
-		err: {
-			index: number;
-			code: number;
-			errmsg: string;
-		};
-		index: number;
-	}>;
-}
-
 export interface IParserError {
 	expose: boolean;
 	statusCode: number;

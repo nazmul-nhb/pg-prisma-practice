@@ -1,10 +1,8 @@
 import { ErrorWithStatus } from '@/classes/ErrorWithStatus';
 import { typeGuards } from '@/errors/errorGuards';
 import { genericErrors } from '@/errors/genericErrors';
-import { mongoErrors } from '@/errors/mongoErrors';
 import { handleZodErrors } from '@/errors/zodErrors';
 import type { IErrorResponse } from '@/types/interfaces';
-import { Error as MongoError } from 'mongoose';
 import { ZodError } from 'zod';
 
 /**
@@ -18,18 +16,6 @@ const processErrors = (error: unknown): IErrorResponse => {
 	// Zod Validation Error
 	if (error instanceof ZodError) {
 		return handleZodErrors(error, stack);
-	}
-	// MongoDB Duplicate Error
-	else if (typeGuards.isMongoDuplicateError(error)) {
-		return mongoErrors.handleDuplicateError(error, stack);
-	}
-	// Mongoose ValidationError
-	else if (error instanceof MongoError.ValidationError) {
-		return mongoErrors.handleValidationError(error, stack);
-	}
-	// Mongoose CastError
-	else if (typeGuards.isCastError(error)) {
-		return mongoErrors.handleCastError(error, stack);
 	}
 	// Express Body Parser Error
 	else if (typeGuards.isParserError(error)) {
