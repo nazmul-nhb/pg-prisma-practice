@@ -3,8 +3,8 @@ import catchAsync from '@/utilities/catchAsync';
 import sendResponse from '@/utilities/sendResponse';
 
 class UserControllers {
-	getAllUsers = catchAsync(async (_req, res) => {
-		const users = await userServices.getAllUsersFromDB();
+	getAllUsers = catchAsync(async (req, res) => {
+		const users = await userServices.getAllUsersFromDB(req.query);
 
 		sendResponse(res, 'User', 'GET', users);
 	});

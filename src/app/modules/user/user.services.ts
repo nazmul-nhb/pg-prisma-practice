@@ -1,10 +1,21 @@
-import { prisma, type User } from '@/configs/prisma.gen';
+import { Prisma, prisma, type User } from '@/configs/prisma.gen';
 import type { TQueries } from '@/types';
+import { convertObjectValues, isValidObject, pickFields } from 'nhb-toolbox';
+import type { GenericObject } from 'nhb-toolbox/object/types';
+
+export function extractKeys<T extends GenericObject>(obj: T): Array<keyof T> {
+	return Object.keys(obj);
+}
 
 class UserServices {
 	async getAllUsersFromDB(query?: TQueries<User>) {
+		const queries = pickFields(
+			convertObjectValues(query!, { keys: ['id'], convertTo: 'number' }),
+			extractKeys(Prisma.UserScalarFieldEnum)
+		);
+
 		const users = await prisma.user.findMany({
-			where: query,
+			...(isValidObject(query) && { where: queries }),
 			orderBy: { id: 'asc' },
 		});
 

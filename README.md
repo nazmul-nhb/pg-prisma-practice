@@ -48,10 +48,9 @@ pnpm dev     # or npm run dev / yarn dev
  │
  ├─ 📁 src/
  │   ├─ 📁 app/                # All source (*.ts) files
- │   |   ├─ 📁 classes/        # Utility classes e.g. `ErrorWihStatus`
- │   |   ├─ 📁 configs/        # App configurations
+ │   |   ├─ 📁 configs/        # App configurations (Database, ENV etc.)
  │   |   ├─ 📁 constants/      # Constant values
- │   |   ├─ 📁 errors/         # Custom error processors/handlers
+ │   |   ├─ 📁 errors/         # Custom error Class/processors/handlers
  │   |   ├─ 📁 middlewares/    # Custom Express middlewares
  │   |   ├─ 📁 modules/        # Feature modules (controllers, services, etc.)
  │   |   ├─ 📁 routes/         # Route definitions
