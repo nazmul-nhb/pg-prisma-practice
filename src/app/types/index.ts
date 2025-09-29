@@ -1,5 +1,6 @@
 import type { COLLECTIONS, USER_ROLES } from '@/constants';
 import type { STATUS_CODES } from 'nhb-toolbox/constants';
+import type { StrictObject } from 'nhb-toolbox/object/types';
 import type { Branded } from 'nhb-toolbox/types';
 
 export type ExceptionSignal = NodeJS.UncaughtExceptionOrigin | NodeJS.Signals;
@@ -15,6 +16,10 @@ export type TStatusCode = (typeof STATUS_CODES)[keyof typeof STATUS_CODES];
 export type TUserRole = (typeof USER_ROLES)[number];
 
 export type TEmail = Branded<string, 'email'>;
+
+export type TQueries<T extends StrictObject> = {
+	[K in keyof T]?: T[K];
+};
 
 // ! May not need
 export type SearchField<T> = {

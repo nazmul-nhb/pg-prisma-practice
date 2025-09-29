@@ -1,5 +1,4 @@
 import type { TEmail, TUserRole } from '@/types';
-import type { Document, Model, Types } from 'mongoose';
 
 export interface IUser extends ILoginCredentials {
 	first_name: string;
@@ -21,21 +20,13 @@ export interface ITokens {
 }
 
 export interface IPlainUser extends IUser {
-	_id: Types.ObjectId;
 	created_at: string;
 	updated_at: string;
 }
 
-export interface IUserDoc extends IPlainUser, Document {
-	_id: Types.ObjectId;
-}
-
-export interface IUserModel extends Model<IUserDoc> {
-	validateUser(email?: TEmail): Promise<IUserDoc>;
-}
+export interface IUserDoc extends IPlainUser {}
 
 export interface ICurrentUser extends Omit<IUser, 'password'> {
-	_id: Types.ObjectId;
 	created_at: string;
 	updated_at: string;
 }

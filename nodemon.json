@@ -1,6 +1,8 @@
 {
 	"watch": [
 		"src",
+		"prisma",
+		"generated",
 		".env"
 	],
 	"ext": "ts",

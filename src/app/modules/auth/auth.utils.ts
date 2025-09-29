@@ -41,7 +41,7 @@ export const processLogin = async <T extends IUserDoc>(password: string, user: T
 		configs.refreshExpireTime
 	);
 
-	const { password: _, __v, ...userInfo } = user.toObject<IPlainUser>();
+	const { password: _, ...userInfo } = user as IPlainUser;
 
 	return {
 		access_token: accessToken,

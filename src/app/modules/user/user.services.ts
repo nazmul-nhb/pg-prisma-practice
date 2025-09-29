@@ -1,24 +1,24 @@
-import { QueryBuilder } from '@/classes/QueryBuilder';
-import { User } from '@/modules/user/user.model';
-import type { IPlainUser } from '@/modules/user/user.types';
-import type { TEmail } from '@/types';
+import { prisma } from '@/configs/prisma';
+import type { TQueries } from '@/types';
+import type { User } from '../../../../generated/prisma';
 
-const getAllUsersFromDB = async (query?: Record<string, unknown>) => {
-	const userQuery = new QueryBuilder(User.find(), query).sort();
-	// const users = await User.find({});
+class UserServices {
+	async getAllUsersFromDB(query?: TQueries<User>) {
+		const users = await prisma.user.findMany({
+			where: query,
+			orderBy: { id: 'asc' },
+		});
 
-	const users = await userQuery.modelQuery;
+		return users;
+	}
 
-	return users;
-};
+	// async getCurrentUserFromDB(email: TEmail | undefined) {
+	// 	const user = await User.validateUser(email);
 
-/** * Get current user from DB. */
-const getCurrentUserFromDB = async (email: TEmail | undefined) => {
-	const user = await User.validateUser(email);
+	// 	const { password: _, __v, ...userInfo } = user.toObject<IPlainUser>();
 
-	const { password: _, __v, ...userInfo } = user.toObject<IPlainUser>();
+	// 	return userInfo;
+	// }
+}
 
-	return userInfo;
-};
-
-export const userServices = { getAllUsersFromDB, getCurrentUserFromDB };
+export const userServices = new UserServices();
