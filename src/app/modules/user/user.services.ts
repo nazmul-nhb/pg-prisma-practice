@@ -1,6 +1,5 @@
-import { prisma } from '@/configs/prisma';
+import { prisma, type User } from '@/configs/prisma.gen';
 import type { TQueries } from '@/types';
-import type { User } from '../../../../generated/prisma';
 
 class UserServices {
 	async getAllUsersFromDB(query?: TQueries<User>) {

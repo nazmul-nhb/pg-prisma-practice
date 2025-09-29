@@ -1,5 +1,4 @@
-import { prisma } from '@/configs/prisma';
-import type { Prisma } from '../../../../generated/prisma';
+import { prisma, type Prisma } from '@/configs/prisma.gen';
 
 class AuthServices {
 	async registerUserInDB(payload: Prisma.UserCreateInput) {

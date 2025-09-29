@@ -1,8 +1,12 @@
-import type { ErrorWithStatus } from '@/classes/ErrorWithStatus';
+import type { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import type { IErrorResponse, IParserError } from '@/types/interfaces';
+import { HTTP_STATUS } from 'nhb-toolbox/constants';
 
 /** * Process custom `ErrorWithStatus` */
-export const handleErrorWithStatus = (error: ErrorWithStatus, stack?: string) => {
+export const handleErrorWithStatus = (
+	error: ErrorWithStatus,
+	stack?: string
+): IErrorResponse => {
 	return {
 		statusCode: error.status,
 		name: error.name,
@@ -19,7 +23,7 @@ export const handleErrorWithStatus = (error: ErrorWithStatus, stack?: string) =>
 /** * Processes general Error objects. */
 export const handleGenericError = (error: Error, stack?: string): IErrorResponse => {
 	return {
-		statusCode: 500,
+		statusCode: HTTP_STATUS.INTERNAL_SERVER_ERROR,
 		name: error.name || 'Unexpected Error!',
 		errorSource: [
 			{
@@ -34,7 +38,7 @@ export const handleGenericError = (error: Error, stack?: string): IErrorResponse
 /** * Processes Express Body Parser Errors. */
 export const handleParserError = (_error: IParserError, stack?: string): IErrorResponse => {
 	return {
-		statusCode: 400,
+		statusCode: HTTP_STATUS.BAD_REQUEST,
 		name: 'Invalid JSON Payload',
 		errorSource: [
 			{

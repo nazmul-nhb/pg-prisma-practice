@@ -1,5 +1,5 @@
-import { ErrorWithStatus } from '@/classes/ErrorWithStatus';
 import configs from '@/configs';
+import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import processErrors from '@/errors/processErrors';
 import { deleteFromCloudinary } from '@/utilities/cloudinaryUtilities';
 import type { ErrorRequestHandler, RequestHandler } from 'express';

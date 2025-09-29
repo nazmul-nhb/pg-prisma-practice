@@ -1,16 +1,11 @@
-import { ErrorWithStatus } from '@/classes/ErrorWithStatus';
-import { typeGuards } from '@/errors/errorGuards';
+import { errorGuard } from '@/errors/ErrorGuard';
+import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import { genericErrors } from '@/errors/genericErrors';
+import { handlePrismaError } from '@/errors/prismaErrors';
 import { handleZodErrors } from '@/errors/zodErrors';
 import type { IErrorResponse } from '@/types/interfaces';
-import type { StrictObject } from 'nhb-toolbox/object/types';
+import { HTTP_STATUS } from 'nhb-toolbox/constants';
 import { ZodError } from 'zod';
-import { PrismaClientKnownRequestError } from '../../../generated/prisma/runtime/library';
-
-interface Meta extends StrictObject {
-	modelName: string;
-	target: string[];
-}
 
 /**
  * * Processes an error of `unknown` type and returns a structured response.
@@ -23,25 +18,11 @@ const processErrors = (error: unknown): IErrorResponse => {
 	// Zod Validation Error
 	if (error instanceof ZodError) {
 		return handleZodErrors(error, stack);
-	} else if (error instanceof PrismaClientKnownRequestError) {
-		const { modelName = '', target = [] } = (error?.meta as Meta) ?? {};
-
-		const path = target?.join('.');
-
-		const message =
-			error.code === 'P2002' ?
-				`${modelName} must be with unique ${path}!`
-			:	'Database Error! Please try again later!';
-
-		return {
-			name: 'Validation Error',
-			statusCode: 400,
-			errorSource: [{ path, message }],
-			stack: error.stack,
-		};
+	} else if (errorGuard.isPrismaError(error)) {
+		return handlePrismaError(error);
 	}
 	// Express Body Parser Error
-	else if (typeGuards.isParserError(error)) {
+	else if (errorGuard.isParserError(error)) {
 		return genericErrors.handleParserError(error, stack);
 	}
 	// Custom ErrorWithStatus
@@ -55,7 +36,7 @@ const processErrors = (error: unknown): IErrorResponse => {
 
 	// Fallback for unknown errors
 	return {
-		statusCode: 500,
+		statusCode: HTTP_STATUS.INTERNAL_SERVER_ERROR,
 		name: 'Unknown Error!',
 		errorSource: [{ path: 'unknown', message: 'An Unknown Error Occurred!' }],
 		stack,

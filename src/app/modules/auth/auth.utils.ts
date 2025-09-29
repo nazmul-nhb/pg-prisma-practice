@@ -1,5 +1,5 @@
-import { ErrorWithStatus } from '@/classes/ErrorWithStatus';
 import configs from '@/configs';
+import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import type { IPlainUser, IUserDoc } from '@/modules/user/user.types';
 import { comparePassword, generateToken } from '@/utilities/authUtilities';
 import { STATUS_CODES } from 'nhb-toolbox/constants';

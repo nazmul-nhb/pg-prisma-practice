@@ -1,5 +1,6 @@
 import type { IErrorResponse, IErrorSource } from '@/types/interfaces';
 import { joinArrayElements } from 'nhb-toolbox';
+import { HTTP_STATUS } from 'nhb-toolbox/constants';
 import type { ZodError } from 'zod';
 
 /** * Processes Zod Validation Errors and returns a structured response. */
@@ -18,7 +19,7 @@ export const handleZodErrors = (error: ZodError, stack?: string): IErrorResponse
 	});
 
 	return {
-		statusCode: 400,
+		statusCode: HTTP_STATUS.BAD_REQUEST,
 		name: 'Validation Error',
 		errorSource,
 		stack: error.stack || stack,

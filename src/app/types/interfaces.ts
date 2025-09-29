@@ -1,15 +1,21 @@
-import type { TEmail, TUserRole } from '@/types';
+import type { TEmail, TStatusCode, TUserRole } from '@/types';
 import type { Router } from 'express';
 import type { JwtPayload } from 'jsonwebtoken';
+import type { StrictObject } from 'nhb-toolbox/object/types';
 import type { LooseLiteral } from 'nhb-toolbox/utils/types';
 import type Mail from 'nodemailer/lib/mailer';
+
+export interface PrismaErrorMeta extends StrictObject {
+	modelName: string;
+	target: string[];
+}
 
 export interface IParserError {
 	expose: boolean;
 	statusCode: number;
 	status: number;
 	body: string;
-	type: string;
+	type: LooseLiteral<'entity.parse.failed'>;
 }
 
 export interface IErrorSource {
@@ -18,7 +24,7 @@ export interface IErrorSource {
 }
 
 export interface IErrorResponse {
-	statusCode: number;
+	statusCode: TStatusCode;
 	name: string;
 	errorSource: IErrorSource[];
 	stack?: string;

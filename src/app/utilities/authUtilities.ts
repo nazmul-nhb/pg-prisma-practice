@@ -1,5 +1,5 @@
-import { ErrorWithStatus } from '@/classes/ErrorWithStatus';
 import configs from '@/configs';
+import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import type { IUser } from '@/modules/user/user.types';
 import type { DecodedUser } from '@/types/interfaces';
 import bcrypt from 'bcrypt';

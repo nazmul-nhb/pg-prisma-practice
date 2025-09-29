@@ -1,6 +1,6 @@
 {
   "name": "pg-practice-with-express",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
@@ -8,6 +8,8 @@
     "deploy": "nhb-build && vercel --prod",
     "build": "nhb-build",
     "migrate": "prisma migrate dev",
+    "gen": "prisma generate",
+    "studio": "prisma studio",
     "format": "nhb-format",
     "lint": "nhb-lint",
     "fix": "nhb-fix",
@@ -30,6 +32,7 @@
     "prisma"
   ],
   "dependencies": {
+    "@prisma/client": "6.16.2",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
@@ -46,7 +49,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@prisma/client": "^6.16.2",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",

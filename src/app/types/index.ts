@@ -1,9 +1,23 @@
+import type {
+	PrismaClientInitializationError,
+	PrismaClientKnownRequestError,
+	PrismaClientRustPanicError,
+	PrismaClientUnknownRequestError,
+	PrismaClientValidationError,
+} from '@/configs/prisma.rt.lib';
 import type { COLLECTIONS, USER_ROLES } from '@/constants';
 import type { STATUS_CODES } from 'nhb-toolbox/constants';
 import type { StrictObject } from 'nhb-toolbox/object/types';
 import type { Branded } from 'nhb-toolbox/types';
 
 export type ExceptionSignal = NodeJS.UncaughtExceptionOrigin | NodeJS.Signals;
+
+export type PrismaError =
+	| PrismaClientKnownRequestError
+	| PrismaClientUnknownRequestError
+	| PrismaClientRustPanicError
+	| PrismaClientInitializationError
+	| PrismaClientValidationError;
 
 export type TCollection = (typeof COLLECTIONS)[number];
 
