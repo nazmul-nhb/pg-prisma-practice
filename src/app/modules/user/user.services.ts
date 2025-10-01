@@ -19,6 +19,32 @@ class UserServices {
 			orderBy: { id: 'asc' },
 		});
 
+		const p = await prisma.user.findMany({
+			where: {
+				email: {
+					contains: 'hello',
+				},
+			},
+		});
+
+		console.log(p);
+
+		const raw = await prisma.$queryRaw<User[]>(
+			Prisma.sql`select * from "User" where email like '%hello%'`
+		);
+
+		console.log(raw);
+
+		const {
+			_sum: { id: sum },
+		} = await prisma.user.aggregate({
+			_sum: {
+				id: true,
+			},
+		});
+
+		console.log(sum);
+
 		return users;
 	}
 

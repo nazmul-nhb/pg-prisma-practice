@@ -1,12 +1,7 @@
 // @ts-check
 
 import { cpSync } from 'fs';
-import {
-	defineScriptConfig,
-	expressMongooseZodTemplate,
-	updateCollection,
-	updateRoutes,
-} from 'nhb-scripts';
+import { defineScriptConfig } from 'nhb-scripts';
 import { Stylog } from 'nhb-toolbox/stylog';
 
 export default defineScriptConfig({
@@ -34,18 +29,8 @@ export default defineScriptConfig({
 	module: {
 		force: false,
 		destination: 'src/app/modules',
-		defaultTemplate: 'express-mongoose-zod',
-		templates: {
-			'express-mongoose-zod': {
-				createFolder: true,
-				destination: 'src/app/modules',
-				files: (moduleName) => expressMongooseZodTemplate(moduleName, true),
-				onComplete: (moduleName) => {
-					updateCollection(moduleName);
-					updateRoutes(moduleName, true);
-				},
-			},
-		},
+		defaultTemplate: 'express-prisma-postgres',
+		templates: {},
 	},
 });
 
@@ -69,5 +54,6 @@ function copyFolder(srcDir = 'src/public', destDir = 'dist/public') {
 		);
 	} catch (err) {
 		console.error(ansiColor('redBright').toANSI(`🛑 Error copying folder: ${err}`));
+		process.exit(0);
 	}
 }

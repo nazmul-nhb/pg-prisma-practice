@@ -6,9 +6,8 @@ import path from 'path';
 dotenv.config({ path: path.join(process.cwd(), '.env'), quiet: true });
 
 export default {
-	port: process.env.PORT || 4242,
 	NODE_ENV: process.env.NODE_ENV as LooseLiteral<'development' | 'production'>,
-	mongoUri: process.env.MONGO_URI as string,
+	port: process.env.PORT || 4242,
 	saltRounds: Number(process.env.SALT_ROUNDS),
 	accessSecret: process.env.JWT_ACCESS_SECRET as string,
 	accessExpireTime: process.env.JWT_ACCESS_EXPIRES_IN as StringValue,
