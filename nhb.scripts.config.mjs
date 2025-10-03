@@ -1,8 +1,6 @@
 // @ts-check
 
-import { cpSync } from 'fs';
 import { defineScriptConfig } from 'nhb-scripts';
-import { Stylog } from 'nhb-toolbox/stylog';
 
 export default defineScriptConfig({
 	format: {
@@ -20,11 +18,10 @@ export default defineScriptConfig({
 	build: {
 		distFolder: 'dist',
 		commands: [{ cmd: 'tsc' }, { cmd: 'tsc-alias' }],
-		after: [copyFolder],
 	},
 	count: {
 		defaultPath: 'src',
-		excludePaths: ['node_modules', 'dist'],
+		excludePaths: ['node_modules', 'dist', 'generated', 'prisma', 'public'],
 	},
 	module: {
 		force: false,
@@ -33,27 +30,3 @@ export default defineScriptConfig({
 		templates: {},
 	},
 });
-
-/**
- *  * Copies the contents of one folder to another.
- *
- * @param {string} srcDir Path of the source folder. Defaults to `src/public`
- * @param {string} destDir Path of the destination folder. Defaults to `dist/public`
- */
-function copyFolder(srcDir = 'src/public', destDir = 'dist/public') {
-	const ansiColor = Stylog.ansi16;
-	const bgGray = Stylog.ansi16('bgBlackBright').toANSI;
-
-	try {
-		cpSync(srcDir, destDir, { recursive: true });
-		console.info(
-			ansiColor('blackBright').toANSI('│\n') +
-				ansiColor('greenBright').toANSI(
-					`◇  ✅ Contents from ${bgGray(` ${srcDir} `)} copied to ${bgGray(` ${destDir} `)} successfully!`
-				)
-		);
-	} catch (err) {
-		console.error(ansiColor('redBright').toANSI(`🛑 Error copying folder: ${err}`));
-		process.exit(0);
-	}
-}
