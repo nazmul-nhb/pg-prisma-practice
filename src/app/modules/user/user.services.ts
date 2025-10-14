@@ -1,11 +1,6 @@
 import { Prisma, prisma, type User } from '@/configs/prisma.gen';
-import type { TQueries } from '@/types';
-import { convertObjectValues, isValidObject, pickFields } from 'nhb-toolbox';
-import type { GenericObject } from 'nhb-toolbox/object/types';
-
-export function extractKeys<T extends GenericObject>(obj: T): Array<keyof T> {
-	return Object.keys(obj);
-}
+import type { TEmail, TQueries } from '@/types';
+import { convertObjectValues, extractKeys, isValidObject, pickFields } from 'nhb-toolbox';
 
 class UserServices {
 	async getAllUsersFromDB(query?: TQueries<User>) {
@@ -48,13 +43,14 @@ class UserServices {
 		return users;
 	}
 
-	// async getCurrentUserFromDB(email: TEmail | undefined) {
-	// 	const user = await User.validateUser(email);
+	async getCurrentUserFromDB(email: TEmail | undefined) {
+		const user = await prisma.user.findFirst({
+			select: { name: false, email: true },
+			where: { email },
+		});
 
-	// 	const { password: _, __v, ...userInfo } = user.toObject<IPlainUser>();
-
-	// 	return userInfo;
-	// }
+		return user;
+	}
 }
 
 export const userServices = new UserServices();
