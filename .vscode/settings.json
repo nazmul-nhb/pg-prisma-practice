@@ -71,5 +71,14 @@
 		"javascript.updateImportsOnFileMove.enabled": "always",
 		"editor.cursorSmoothCaretAnimation": "on"
 	},
-	"cSpell.words": ["autoincrement", "nhb", "pgsql", "stylog", "Stylog", "whitesmoke"]
+	"cSpell.words": [
+		"autoincrement",
+		"nhb",
+		"pgsql",
+		"relativehumidity",
+		"stylog",
+		"Stylog",
+		"whitesmoke",
+		"windspeed"
+	]
 }
