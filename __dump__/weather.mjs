@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 (async function () {
     const lat = 23.810332,
@@ -41,8 +42,9 @@ import path from 'path';
             .join(',')
     );
     const csv = [header, ...rows].join('\n');
-
-    const outFile = path.resolve('./dhaka-weather.csv');
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const outFile = path.resolve(__dirname, 'dhaka-weather.csv');
     await fs.writeFile(outFile, csv, 'utf8');
     console.log(`✅ Saved CSV: ${outFile}`);
 })();
