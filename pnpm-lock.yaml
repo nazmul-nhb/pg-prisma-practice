@@ -36,8 +36,8 @@ importers:
         specifier: ^2.0.2
         version: 2.0.2
       nhb-toolbox:
-        specifier: ^4.25.4
-        version: 4.25.4
+        specifier: ^4.25.10
+        version: 4.25.10
       nodemailer:
         specifier: ^7.0.10
         version: 7.0.10
@@ -1517,8 +1517,8 @@ packages:
     engines: {node: '>=22'}
     hasBin: true
 
-  nhb-toolbox@4.25.4:
-    resolution: {integrity: sha512-k3Zj+svVYt2dC+mXuEbkBOpTb7Fl0NNRgXPPK4ELXuAPspVa7+5HgAWaxzvwKTF3J6SefQElKGpYrWGIr5yV5g==}
+  nhb-toolbox@4.25.10:
+    resolution: {integrity: sha512-qjtrWXEa2tXSaLK9IGKqZFYx8DVpn9XzN+2LZU9IzgnZa3GoWtVzX9wx6xObnTCEOdffs++EpLK0TlDICkXJYQ==}
 
   node-addon-api@8.5.0:
     resolution: {integrity: sha512-/bRZty2mXUIFY/xU5HLvveNHlswNJej+RnxBjOMkidWfwZzgTbPG1E3K5TOxRLOR+5hX7bSofy8yf1hZevMS8A==}
@@ -3868,14 +3868,14 @@ snapshots:
       execa: 9.6.0
       globby: 15.0.0
       minimist: 1.2.8
-      nhb-toolbox: 4.25.4
+      nhb-toolbox: 4.25.10
       progress-estimator: 0.3.1
       rimraf: 6.1.0
       semver: 7.7.3
       type-fest: 5.2.0
       typescript: 5.9.3
 
-  nhb-toolbox@4.25.4: {}
+  nhb-toolbox@4.25.10: {}
 
   node-addon-api@8.5.0: {}
 

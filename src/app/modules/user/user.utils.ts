@@ -1,13 +1,9 @@
-import { Prisma, prisma, type User } from '@/configs/prisma.gen';
+import { prisma } from '@/configs/prisma.gen';
 import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import type { TPlainUser, TUser } from '@/modules/user/user.types';
 import type { TEmail } from '@/types';
 import { isEmail } from 'nhb-toolbox';
 import { STATUS_CODES } from 'nhb-toolbox/constants';
-
-export const { password, ...userCols } = Object.fromEntries(
-	Object.keys(Prisma.UserScalarFieldEnum).map((k) => [k, true])
-) as Record<keyof User, true>;
 
 /**
  * * Find a specific user using user email.
@@ -28,12 +24,9 @@ export async function findUserByEmail<Pass extends boolean = false>(
 		);
 	}
 
-	const user = await prisma.user.findFirst({
-		select: {
-			...userCols,
-			...(withPassword ? { password } : {}),
-		},
+	const user = await prisma.user.findUnique({
 		where: { email },
+		omit: { password: withPassword ? true : false },
 	});
 
 	if (!user) {
@@ -47,3 +40,12 @@ export async function findUserByEmail<Pass extends boolean = false>(
 
 	return user as Pass extends true ? TUser : TPlainUser;
 }
+
+// const { password, ...userCols } = Object.fromEntries(
+// 	Object.keys(Prisma.UserScalarFieldEnum).map((k) => [k, true])
+// ) as Record<keyof User, true>;
+
+// select: {
+// 	...userCols,
+// 	...(withPassword ? { password } : {}),
+// },
