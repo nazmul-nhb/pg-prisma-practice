@@ -1,6 +1,6 @@
 {
   "name": "pg-prisma-practice",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
@@ -16,9 +16,9 @@
     "fix": "nhb-fix",
     "commit": "nhb-commit",
     "count": "nhb-count",
-    "module": "nhb-module",
+    "module": "nhb-module -t express-prisma-postgres -d src/app/modules",
     "delete": "nhb-delete",
-    "secret": "node secret.mjs"
+    "secret": "node scripts/generateSecret.mjs"
   },
   "author": {
     "name": "Nazmul Hassan",

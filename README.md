@@ -46,6 +46,11 @@ pnpm dev     # or npm run dev / yarn dev
  ├─ 📁 prisma/
  │   └─ 📄 schema.prisma       # Prisma Schema file
  │
+ ├─ 📁 public/                 # Folder contains static files
+ |   └─ 🖼️ favicon.png         # Favicon to show in client application(s) if supported, e.g. Browsers
+ │
+ ├─ 📁 scripts/                # Helper scripts for development purpose
+ │
  ├─ 📁 src/
  │   ├─ 📁 app/                # All source (*.ts) files
  │   |   ├─ 📁 configs/        # App configurations (Database, ENV etc.)
@@ -56,9 +61,6 @@ pnpm dev     # or npm run dev / yarn dev
  │   |   ├─ 📁 routes/         # Route definitions
  │   |   ├─ 📁 types/          # Types for the App
  │   |   └─ 📁 utilities/      # Helper functions
- │   |
- │   ├─ 📁 public/             # Folder contains static files
- │   |   └─ 🖼️ favicon.png     # Favicon to show in client application(s) if supported, e.g. Browsers
  │   |
  │   ├─ 📄 app.ts              # Express app setup
  │   ├─ 📄 index.d.ts          # Global type declarations
@@ -73,7 +75,6 @@ pnpm dev     # or npm run dev / yarn dev
  ├─ ⚙️ nodemon.json            # Nodemon config
  ├─ ⚙️ package.json            # Auto-generated `package.json`
  ├─ 📃 README.md               # This file
- ├─ 📄 secret.mjs              # Generate secrets for jwt (using crypto module, just run in cli: node pnpm/npm/yarn run secret)
  ├─ ⚙️ tsconfig.json           # Ready to use tsconfig
  └─ ⚙️ vercel.json             # Deployment config for Vercel
 ```

@@ -1,4 +1,5 @@
 import { Prisma, prisma, type User } from '@/configs/prisma.gen';
+import { findUserByEmail } from '@/modules/user/user.utils';
 import type { TEmail, TQueries } from '@/types';
 import { convertObjectValues, extractKeys, isValidObject, pickFields } from 'nhb-toolbox';
 
@@ -44,10 +45,7 @@ class UserServices {
 	}
 
 	async getCurrentUserFromDB(email: TEmail | undefined) {
-		const user = await prisma.user.findFirst({
-			select: { name: false, email: true },
-			where: { email },
-		});
+		const user = findUserByEmail(email);
 
 		return user;
 	}

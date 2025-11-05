@@ -15,7 +15,20 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique @db.VarChar(64)
-  name  String @db.VarChar(64)
+  id         Int      @id @default(autoincrement())
+  first_name String   @db.VarChar(64)
+  last_name  String   @db.VarChar(64)
+  email      String   @unique @db.VarChar(128)
+  password   String   @db.VarChar(64)
+  role       UserRole @default(user)
+  is_active  Boolean  @default(true)
+  user_name  String   @unique @db.VarChar(32)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+}
+
+enum UserRole {
+  super_admin
+  admin
+  user
 }

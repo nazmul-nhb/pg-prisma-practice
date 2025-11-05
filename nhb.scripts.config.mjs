@@ -1,6 +1,8 @@
 // @ts-check
 
-import { defineScriptConfig } from 'nhb-scripts';
+import { defineScriptConfig, updateCollection, updateRoutes } from 'nhb-scripts';
+import { expressPrismaPostgresTemplate } from './scripts/moduleTemplate.mjs';
+import { createPrismaPostgresSchema } from './scripts/createSchema.mjs';
 
 export default defineScriptConfig({
 	format: {
@@ -27,6 +29,21 @@ export default defineScriptConfig({
 		force: false,
 		destination: 'src/app/modules',
 		defaultTemplate: 'express-prisma-postgres',
-		templates: {},
+		templates: {
+			'express-prisma-postgres': {
+				createFolder: true,
+				destination: 'src/app/modules',
+				files: expressPrismaPostgresTemplate,
+				onComplete: (moduleName) => {
+					updateCollection(moduleName);
+					updateRoutes(moduleName, true);
+				},
+			},
+			'prisma-postgres-schema': {
+				createFolder: false,
+				destination: 'prisma',
+				files: createPrismaPostgresSchema,
+			},
+		},
 	},
 });
