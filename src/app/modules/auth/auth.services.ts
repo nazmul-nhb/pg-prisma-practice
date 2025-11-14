@@ -1,8 +1,34 @@
 import { prisma, type Prisma } from '@/configs/prisma.gen';
+import { hashPassword } from '@/utilities/authUtilities';
 
 class AuthServices {
 	async registerUserInDB(payload: Prisma.UserCreateInput) {
-		return await prisma.user.create({ data: payload });
+		const { first_name, password } = payload;
+
+		const normalized = first_name.toLowerCase().replace(/\s+/g, '_');
+
+		let username = normalized;
+		let suffix = 0;
+
+		// Continuously check the database for existing usernames
+		while (true) {
+			const exists = await prisma.user.findUnique({
+				where: { user_name: username },
+				select: { id: true },
+			});
+
+			if (!exists) break;
+
+			suffix += 1;
+			username = `${normalized}_${suffix}`;
+		}
+
+		payload.user_name = username;
+		payload.password = await hashPassword(password);
+
+		const user = await prisma.user.create({ data: payload, omit: { password: true } });
+
+		return user;
 	}
 
 	// /**
