@@ -1,14 +1,14 @@
-import { Prisma, prisma, type User } from '@/configs/prisma.gen';
+import { type Prisma, prisma } from '@/configs/prisma.gen';
 import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
-import type { UpdateUser } from '@/modules/user/user.types';
+import type { TPlainUser, UpdateUser } from '@/modules/user/user.types';
 import { findUserByEmail } from '@/modules/user/user.utils';
 import type { TEmail, TQueries } from '@/types';
 import {
 	convertObjectValues,
-	extractKeys,
 	isNotEmptyObject,
 	isValidObject,
 	pickFields,
+	sanitizeData,
 } from 'nhb-toolbox';
 import { STATUS_CODES } from 'nhb-toolbox/constants';
 
@@ -18,12 +18,36 @@ class UserServices {
 	 * @param query Optional query parameters to pass.
 	 * @returns All users that matched the query as an array.
 	 */
-	async getAllUsersFromDB(query?: TQueries<User>) {
+	async getAllUsersFromDB(query?: TQueries<TPlainUser>) {
 		const converted = convertObjectValues(query!, { keys: ['id'], convertTo: 'number' });
-		const queries = pickFields(converted, extractKeys(Prisma.UserScalarFieldEnum));
+		const queries = pickFields(converted, [
+			'id',
+			'first_name',
+			'last_name',
+			'email',
+			'role',
+			'user_name',
+		]);
+
+		const filters = {} as Prisma.UserWhereInput;
+
+		if (isValidObject(queries)) {
+			for (const [key, value] of Object.entries(
+				sanitizeData(queries, { ignoreNullish: true })
+			)) {
+				if (typeof value === 'string') {
+					filters[key as keyof typeof queries] = {
+						contains: value,
+						mode: 'insensitive',
+					};
+				} else {
+					filters[key as keyof typeof queries] = value;
+				}
+			}
+		}
 
 		const users = await prisma.user.findMany({
-			...(isValidObject(queries) && { where: queries }),
+			where: filters,
 			orderBy: { id: 'asc' },
 			omit: { password: true },
 		});
