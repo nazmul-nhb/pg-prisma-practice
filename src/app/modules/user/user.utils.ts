@@ -26,7 +26,7 @@ export async function findUserByEmail<Pass extends boolean = false>(
 
 	const user = await prisma.user.findUnique({
 		where: { email },
-		omit: { password: withPassword ? true : false },
+		omit: { password: withPassword ? false : true },
 	});
 
 	if (!user) {

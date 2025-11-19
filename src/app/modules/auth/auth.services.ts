@@ -1,7 +1,15 @@
 import { prisma, type Prisma } from '@/configs/prisma.gen';
+import { processLogin } from '@/modules/auth/auth.utils';
+import type { TLoginCredentials } from '@/modules/user/user.types';
+import { findUserByEmail } from '@/modules/user/user.utils';
 import { hashPassword } from '@/utilities/authUtilities';
 
 class AuthServices {
+	/**
+	 * * Register a user in the database.
+	 * @param payload Required data to register a user.
+	 * @returns The registered user info or throws error if error occurs.
+	 */
 	async registerUserInDB(payload: Prisma.UserCreateInput) {
 		const { first_name, password } = payload;
 
@@ -10,7 +18,6 @@ class AuthServices {
 		let username = normalized;
 		let suffix = 0;
 
-		// Continuously check the database for existing usernames
 		while (true) {
 			const exists = await prisma.user.findUnique({
 				where: { user_name: username },
@@ -26,24 +33,20 @@ class AuthServices {
 		payload.user_name = username;
 		payload.password = await hashPassword(password);
 
-		const user = await prisma.user.create({ data: payload, omit: { password: true } });
-
-		return user;
+		return await prisma.user.create({ data: payload, omit: { password: true } });
 	}
 
-	// /**
-	//  * * Login user.
-	//  * @param payload Login credentials (`email` and `password`).
-	//  * @returns Token as object.
-	//  */
-	// async loginUser(payload: ILoginCredentials): Promise<ITokens> {
-	// 	// * Validate and extract user from DB.
-	// 	const user = await User.validateUser(payload.email);
+	/**
+	 * * Login user.
+	 * @param payload Login credentials (`email` and `password`).
+	 * @returns Token as object.
+	 */
+	async loginUser(payload: TLoginCredentials) {
+		// * Validate and extract user from DB.
+		const user = await findUserByEmail(payload.email, true);
 
-	// 	const result = await processLogin(payload?.password, user);
-
-	// 	return result;
-	// }
+		return await processLogin(payload?.password, user);
+	}
 
 	// /**
 	//  * Refresh token.

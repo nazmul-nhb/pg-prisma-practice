@@ -5,10 +5,8 @@ import { convertObjectValues, extractKeys, isValidObject, pickFields } from 'nhb
 
 class UserServices {
 	async getAllUsersFromDB(query?: TQueries<User>) {
-		const queries = pickFields(
-			convertObjectValues(query!, { keys: ['id'], convertTo: 'number' }),
-			extractKeys(Prisma.UserScalarFieldEnum)
-		);
+		const converted = convertObjectValues(query!, { keys: ['id'], convertTo: 'number' });
+		const queries = pickFields(converted, extractKeys(Prisma.UserScalarFieldEnum));
 
 		const users = await prisma.user.findMany({
 			...(isValidObject(query) && { where: queries }),
