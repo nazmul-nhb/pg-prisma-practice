@@ -1,7 +1,16 @@
 import { Prisma, prisma, type User } from '@/configs/prisma.gen';
+import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
+import type { UpdateUser } from '@/modules/user/user.types';
 import { findUserByEmail } from '@/modules/user/user.utils';
 import type { TEmail, TQueries } from '@/types';
-import { convertObjectValues, extractKeys, isValidObject, pickFields } from 'nhb-toolbox';
+import {
+	convertObjectValues,
+	extractKeys,
+	isNotEmptyObject,
+	isValidObject,
+	pickFields,
+} from 'nhb-toolbox';
+import { STATUS_CODES } from 'nhb-toolbox/constants';
 
 class UserServices {
 	/**
@@ -14,35 +23,38 @@ class UserServices {
 		const queries = pickFields(converted, extractKeys(Prisma.UserScalarFieldEnum));
 
 		const users = await prisma.user.findMany({
-			...(isValidObject(query) && { where: queries }),
+			...(isValidObject(queries) && { where: queries }),
 			orderBy: { id: 'asc' },
+			omit: { password: true },
 		});
 
-		const p = await prisma.user.findMany({
-			where: {
-				email: {
-					contains: 'hello',
-				},
-			},
-		});
+		// ! Alternatives Below:
 
-		console.log(p);
+		// const p = await prisma.user.findMany({
+		// 	where: {
+		// 		email: {
+		// 			contains: 'hello',
+		// 		},
+		// 	},
+		// });
 
-		const raw = await prisma.$queryRaw<User[]>(
-			Prisma.sql`select * from "User" where email like '%hello%'`
-		);
+		// console.log(p);
 
-		console.log(raw);
+		// const raw = await prisma.$queryRaw<User[]>(
+		// 	Prisma.sql`select * from "User" where email like '%hello%'`
+		// );
 
-		const {
-			_sum: { id: sum },
-		} = await prisma.user.aggregate({
-			_sum: {
-				id: true,
-			},
-		});
+		// console.log(raw);
 
-		console.log(sum);
+		// const {
+		// 	_sum: { id: sum },
+		// } = await prisma.user.aggregate({
+		// 	_sum: {
+		// 		id: true,
+		// 	},
+		// });
+
+		// console.log(sum);
 
 		return users;
 	}
@@ -54,6 +66,82 @@ class UserServices {
 	 */
 	async getCurrentUserFromDB(email: TEmail | undefined) {
 		return await findUserByEmail(email);
+	}
+
+	/**
+	 * * Retrieve a user from DB.
+	 * @param id ID of user in integer form.
+	 * @returns The matched user against the provided id.
+	 */
+	async getUserByIdFromDB(id: number) {
+		const user = await prisma.user.findUnique({
+			where: { id },
+			omit: { password: true },
+		});
+
+		if (!user) {
+			throw new ErrorWithStatus(
+				'Not Found Error',
+				`User not found with id ${id}!`,
+				STATUS_CODES.NOT_FOUND,
+				'GET users/:id'
+			);
+		}
+
+		return user;
+	}
+
+	/**
+	 * * Delete a user from DB.
+	 * @param id ID of the user to delete.
+	 * @returns Deleted user's id as `{ deleted_id: number }`
+	 */
+	async deleteUserByIdFromDB(id: number) {
+		const deletedUser = await prisma.user.delete({ where: { id }, select: { id: true } });
+
+		if (!deletedUser) {
+			throw new ErrorWithStatus(
+				'Delete Error',
+				`Cannot delete user with id ${id}!`,
+				STATUS_CODES.NOT_FOUND,
+				'DELETE users/:id'
+			);
+		}
+
+		return { deleted_id: deletedUser.id };
+	}
+
+	/**
+	 * * Update a user in DB by id.
+	 * @param id ID to find user from DB.
+	 * @param payload Fields to update in user.
+	 */
+	async updateUserInDB(id: number, payload: UpdateUser) {
+		if (!isNotEmptyObject(payload)) {
+			throw new ErrorWithStatus(
+				'Empty Payload',
+				`Your payload is empty for user with id ${id}!`,
+				STATUS_CODES.BAD_REQUEST,
+				'PATCH users/:id'
+			);
+		}
+
+		const updatedUser = await prisma.user.update({
+			where: { id },
+			data: payload,
+			omit: { password: true },
+		});
+
+		if (!updatedUser) {
+			throw new ErrorWithStatus(
+				'Update Error',
+				`Cannot update user with id ${id}!`,
+				STATUS_CODES.NOT_FOUND,
+				'PATCH users/:id'
+			);
+		}
+
+		return updatedUser;
 	}
 }
 
