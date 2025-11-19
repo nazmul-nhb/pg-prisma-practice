@@ -6,6 +6,7 @@ import type { TEmail, TQueries } from '@/types';
 import {
 	convertObjectValues,
 	isNotEmptyObject,
+	isString,
 	isValidObject,
 	pickFields,
 	sanitizeData,
@@ -35,7 +36,7 @@ class UserServices {
 			for (const [key, value] of Object.entries(
 				sanitizeData(queries, { ignoreNullish: true })
 			)) {
-				if (typeof value === 'string') {
+				if (isString(value)) {
 					filters[key as keyof typeof queries] = {
 						contains: value,
 						mode: 'insensitive',
@@ -98,10 +99,7 @@ class UserServices {
 	 * @returns The matched user against the provided id.
 	 */
 	async getUserByIdFromDB(id: number) {
-		const user = await prisma.user.findUnique({
-			where: { id },
-			omit: { password: true },
-		});
+		const user = await prisma.user.findUnique({ where: { id }, omit: { password: true } });
 
 		if (!user) {
 			throw new ErrorWithStatus(

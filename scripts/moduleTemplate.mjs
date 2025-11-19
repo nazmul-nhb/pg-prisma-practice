@@ -97,12 +97,10 @@ export const ${moduleName}Controllers = new ${capModule}Controllers();
         // ! module.services.ts
         {
             name: `${moduleName}.services.ts`,
-            content: `import { db } from '#/prisma';
-import { ${pluralModule} } from '#/prisma/schema/${pluralModule}';
+            content: `import { prisma, type Prisma, type ${capModule} } from '@/configs/prisma.gen';
 import { ErrorWithStatus } from '${baseAlias}/errors/ErrorWithStatus';
-import type { Insert${capModule} } from '${moduleAlias}/${moduleName}.types';
+import type { Update${capModule} } from '@/modules/${moduleName}/${moduleName}.types';
 import type { TQueries } from '${baseAlias}/types';
-import { eq } from 'prisma-orm';
 import { isNotEmptyObject } from 'nhb-toolbox';
 import { STATUS_CODES } from 'nhb-toolbox/constants';
             
@@ -112,8 +110,8 @@ class ${capModule}Services {
      * @param payload All the required fields to create ${moduleName}.
      * @returns Created new ${moduleName}.
      */
-    async create${capModule}InDB(payload: Insert${capModule}) {
-        const [${moduleName}] = await db.insert(${pluralModule}).values(payload).returning();
+    async create${capModule}InDB(payload: Prisma.${capModule}CreateInput) {
+        const [${moduleName}] = await prisma.${moduleName}.create({ data: payload });
 
 		if (!${moduleName}) {
 			throw new ErrorWithStatus(
@@ -132,12 +130,13 @@ class ${capModule}Services {
      * @param query Optional query parameters to pass.
      * @returns All ${pluralModule} that matched the query as an array.
      */
-    async getAll${pluralCapModule}FromDB(query?: TQueries<Insert${capModule}>) {
-        console.log(query);
-
-        const result = await db.select().from(${pluralModule}).orderBy(${pluralModule}.id);
-
-        return result;
+    async getAll${pluralCapModule}FromDB(query?: TQueries<${capModule}>) {
+        const filters = query as Prisma.${capModule}WhereInput;
+        
+        return await await prisma.${moduleName}.findMany({
+			where: filters,
+			orderBy: { id: 'asc' },
+		});
     }
             
     /**
@@ -146,9 +145,7 @@ class ${capModule}Services {
      * @returns The matched ${moduleName} against the provided id.
      */
     async get${capModule}ByIdFromDB(id: number) {
-        const ${moduleName} = await db.query.${pluralModule}.findFirst({
-            where: (ut, q) => q.eq(ut.id, id),
-        });
+        const ${moduleName} = await prisma.${moduleName}.findUnique({ where: { id } });
 
         if (!${moduleName}) {
             throw new ErrorWithStatus(
@@ -168,12 +165,9 @@ class ${capModule}Services {
      * @returns Deleted ${moduleName}'s id as \`{ deleted_id: number }\`
      */
     async delete${capModule}ByIdFromDB(id: number) {
-        const [res] = await db
-            .delete(${pluralModule})
-            .where(eq(${pluralModule}.id, id))
-            .returning({ deleted_id: ${pluralModule}.id });
+		const deleted${capModule} = await prisma.${moduleName}.delete({ where: { id }, select: { id: true } });
 
-        if (!res) {
+        if (!deleted${capModule}) {
             throw new ErrorWithStatus(
                 'Delete Error',
                 \`Cannot delete ${moduleName} with id \${id}!\`,
@@ -182,7 +176,7 @@ class ${capModule}Services {
             );
         }
 
-        return res;
+		return { deleted_id: deleted${capModule}.id };
     }
 
     /**
@@ -190,7 +184,7 @@ class ${capModule}Services {
      * @param id ID to find ${moduleName} from DB.
      * @param payload Fields to update in ${moduleName}.
      */
-    async update${capModule}InDB(id: number, payload: Partial<Insert${capModule}>) {
+    async update${capModule}InDB(id: number, payload: Update${capModule}) {
         if (!isNotEmptyObject(payload)) {
             throw new ErrorWithStatus(
                 'Empty Payload',
@@ -200,9 +194,12 @@ class ${capModule}Services {
             );
         }
 
-        const [res] = await db.update(${pluralModule}).set(payload).where(eq(${pluralModule}.id, id)).returning();
+        const updated${capModule} = await prisma.${moduleName}.update({
+            where: { id },
+            data: payload,
+        });
 
-        if (!res) {
+        if (!updated${capModule}) {
             throw new ErrorWithStatus(
                 'Update Error',
                 \`Cannot update ${moduleName} with id \${id}!\`,
@@ -211,7 +208,7 @@ class ${capModule}Services {
             );
         }
 
-        return res;
+        return updated${capModule};
     }
 }
 
@@ -221,9 +218,7 @@ export const ${moduleName}Services = new ${capModule}Services();
         // ! module.validation.ts
         {
             name: `${moduleName}.validation.ts`,
-            content: `import { ${pluralModule} } from '#/prisma/schema/${pluralModule}';
-import { createInsertSchema } from 'prisma-zod';
-import { z } from 'zod';
+            content: `import { z } from 'zod';
 
 const creationSchema = z
     .object({})
@@ -231,20 +226,15 @@ const creationSchema = z
 
 const updateSchema = creationSchema.partial();
 
-/** Convert prisma table schema to Zod schema */
-const prismaSchema = createInsertSchema(${pluralModule});
-
-export const ${moduleName}Validations = { creationSchema, prismaSchema, updateSchema };
+export const ${moduleName}Validations = { creationSchema, updateSchema };
             `,
         },
         // ! module.types.ts
         {
             name: `${moduleName}.types.ts`,
-            content: `import type { ${pluralModule} } from '#/prisma/schema/${pluralModule}';
+            content: `import type { Prisma, ${capModule} } from '@/configs/prisma.gen';
 
-export type Insert${capModule} = typeof ${pluralModule}.$inferInsert;
-
-export type T${capModule} = typeof ${pluralModule}.$inferSelect;
+export type Update${capModule} = Prisma.${capModule}CreateInput;
             `,
         },
     ];

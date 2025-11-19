@@ -1,7 +1,7 @@
 import configs from '@/configs';
-import { prisma, type Prisma } from '@/configs/prisma.gen';
+import { prisma } from '@/configs/prisma.gen';
 import { processLogin } from '@/modules/auth/auth.utils';
-import type { TLoginCredentials } from '@/modules/user/user.types';
+import type { InsertUser, TLoginCredentials } from '@/modules/user/user.types';
 import { findUserByEmail } from '@/modules/user/user.utils';
 import type { DecodedUser } from '@/types/interfaces';
 import { generateToken, hashPassword, verifyToken } from '@/utilities/authUtilities';
@@ -13,7 +13,7 @@ class AuthServices {
 	 * @param payload Required data to register a user.
 	 * @returns The registered user info or throws error if error occurs.
 	 */
-	async registerUserInDB(payload: Prisma.UserCreateInput) {
+	async registerUserInDB(payload: InsertUser) {
 		const { first_name, password } = payload;
 
 		const normalized = first_name.toLowerCase().replace(/\s+/g, '_');
