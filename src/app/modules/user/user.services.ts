@@ -4,6 +4,11 @@ import type { TEmail, TQueries } from '@/types';
 import { convertObjectValues, extractKeys, isValidObject, pickFields } from 'nhb-toolbox';
 
 class UserServices {
+	/**
+	 * * Get all users from database.
+	 * @param query Optional query parameters to pass.
+	 * @returns All users that matched the query as an array.
+	 */
 	async getAllUsersFromDB(query?: TQueries<User>) {
 		const converted = convertObjectValues(query!, { keys: ['id'], convertTo: 'number' });
 		const queries = pickFields(converted, extractKeys(Prisma.UserScalarFieldEnum));
@@ -42,10 +47,13 @@ class UserServices {
 		return users;
 	}
 
+	/**
+	 * * Get the current logged-in user's info from DB.
+	 * @param email User email
+	 * @returns The user details without the password field.
+	 */
 	async getCurrentUserFromDB(email: TEmail | undefined) {
-		const user = findUserByEmail(email);
-
-		return user;
+		return await findUserByEmail(email);
 	}
 }
 

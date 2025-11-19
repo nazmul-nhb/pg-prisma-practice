@@ -1,8 +1,11 @@
+import configs from '@/configs';
 import { prisma, type Prisma } from '@/configs/prisma.gen';
 import { processLogin } from '@/modules/auth/auth.utils';
 import type { TLoginCredentials } from '@/modules/user/user.types';
 import { findUserByEmail } from '@/modules/user/user.utils';
-import { hashPassword } from '@/utilities/authUtilities';
+import type { DecodedUser } from '@/types/interfaces';
+import { generateToken, hashPassword, verifyToken } from '@/utilities/authUtilities';
+import { pickFields } from 'nhb-toolbox';
 
 class AuthServices {
 	/**
@@ -48,36 +51,36 @@ class AuthServices {
 		return await processLogin(payload?.password, user);
 	}
 
-	// /**
-	//  * Refresh token.
-	//  * @param token Refresh token from client.
-	//  * @returns New access token.
-	//  */
-	// async refreshToken(token: string): Promise<{ token: string }> {
-	// 	// * Verify and decode token
-	// 	const decodedToken = verifyToken(configs.refreshSecret, token);
+	/**
+	 * * Refresh access token (Get new one).
+	 * @param token Refresh token from client.
+	 * @returns New access token.
+	 */
+	async refreshToken(token: string): Promise<{ token: string }> {
+		// * Verify and decode token
+		const { email } = verifyToken(configs.refreshSecret, token);
 
-	// 	// * Validate and extract user from DB.
-	// 	const user = await User.validateUser(decodedToken.email);
+		// * Validate and extract user from DB.
+		const user = await findUserByEmail(email);
 
-	// 	// * Create token and send to the client.
-	// 	const accessToken = generateToken(
-	// 		pickFields(user, ['email', 'role']),
-	// 		configs.accessSecret,
-	// 		configs.accessExpireTime
-	// 	);
+		// * Create token and send to the client.
+		const accessToken = generateToken(
+			pickFields(user, ['email', 'role']),
+			configs.accessSecret,
+			configs.accessExpireTime
+		);
 
-	// 	return { token: accessToken };
-	// }
+		return { token: accessToken };
+	}
 
-	// /** * Get current user from DB. */
-	// async getCurrentUserFromDB(client?: DecodedUser) {
-	// 	const user = await User.validateUser(client?.email);
-
-	// 	const { password: _, __v, ...userInfo } = user.toObject<IPlainUser>();
-
-	// 	return userInfo;
-	// }
+	/**
+	 * * Get the current logged-in user's info from DB.
+	 * @param email User details from decoded JWT token.
+	 * @returns The user details without the password field.
+	 */
+	async getCurrentUserFromDB(client: DecodedUser | undefined) {
+		return await findUserByEmail(client?.email);
+	}
 }
 
 export const authServices = new AuthServices();
