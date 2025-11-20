@@ -1,6 +1,6 @@
 {
   "name": "pg-prisma-practice",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
@@ -36,6 +36,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "7.0.0",
+    "@prisma/client-runtime-utils": "^7.0.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",
     "cookie-parser": "^1.4.7",
