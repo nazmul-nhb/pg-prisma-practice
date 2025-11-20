@@ -1,6 +1,6 @@
 {
   "name": "pg-prisma-practice",
-  "version": "2.4.4",
+  "version": "2.4.6",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",

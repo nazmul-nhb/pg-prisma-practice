@@ -3,7 +3,7 @@
 import { capitalizeString, pluralizer } from 'nhb-toolbox';
 
 /**
- * * Generate module for Prisma/Postgres based Express TS Server. 
+ * * Generate module for Prisma/Postgres based Express TS Server.
  * @param {string} moduleName Name of the module.
  * @returns Array of objects (file names and contents).
  */
@@ -99,7 +99,7 @@ export const ${moduleName}Controllers = new ${capModule}Controllers();
             name: `${moduleName}.services.ts`,
             content: `import { prisma, type Prisma, type ${capModule} } from '@/configs/prisma';
 import { ErrorWithStatus } from '${baseAlias}/errors/ErrorWithStatus';
-import type { Update${capModule} } from '@/modules/${moduleName}/${moduleName}.types';
+import type { Insert${capModule}, Update${capModule} } from '@/modules/${moduleName}/${moduleName}.types';
 import type { TQueries } from '${baseAlias}/types';
 import { isNotEmptyObject } from 'nhb-toolbox';
 import { STATUS_CODES } from 'nhb-toolbox/constants';
@@ -110,10 +110,10 @@ class ${capModule}Services {
      * @param payload All the required fields to create ${moduleName}.
      * @returns Created new ${moduleName}.
      */
-    async create${capModule}InDB(payload: Prisma.${capModule}CreateInput) {
-        const new${capModule} = await prisma.${moduleName}.create({ data: payload });
+    async create${capModule}InDB(payload: Insert${capModule}) {
+        const ${moduleName} = await prisma.${moduleName}.create({ data: payload });
 
-		if (!new${capModule}) {
+		if (!${moduleName}) {
 			throw new ErrorWithStatus(
 				'Creation Error',
 				'Cannot create ${moduleName} right now! Please try again later!',
@@ -122,7 +122,7 @@ class ${capModule}Services {
 			);
 		}
 
-        return new${capModule};
+        return ${moduleName};
     }
     
     /**
@@ -145,9 +145,9 @@ class ${capModule}Services {
      * @returns The matched ${moduleName} against the provided id.
      */
     async get${capModule}ByIdFromDB(id: number) {
-        const ${moduleName}_1 = await prisma.${moduleName}.findUnique({ where: { id } });
+        const ${moduleName} = await prisma.${moduleName}.findUnique({ where: { id } });
 
-        if (!${moduleName}_1) {
+        if (!${moduleName}) {
             throw new ErrorWithStatus(
                 'Not Found Error',
                 \`${capModule} not found with id \${id}!\`,
@@ -156,7 +156,7 @@ class ${capModule}Services {
             );
         }
 
-        return ${moduleName}_1;
+        return ${moduleName};
     }
 
     /**
@@ -233,8 +233,9 @@ export const ${moduleName}Validations = { creationSchema, updateSchema };
         {
             name: `${moduleName}.types.ts`,
             content: `import type { Prisma } from '@/configs/prisma';
+export type Insert${capModule} = Omit<Prisma.${capModule}CreateInput, 'id' | 'created_at' | 'updated_at'>;
 
-export type Update${capModule} = Partial<Prisma.${capModule}CreateInput>;
+export type Update${capModule} = Partial<Insert${capModule}>;
             `,
         },
     ];
