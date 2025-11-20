@@ -97,7 +97,7 @@ export const ${moduleName}Controllers = new ${capModule}Controllers();
         // ! module.services.ts
         {
             name: `${moduleName}.services.ts`,
-            content: `import { prisma, type Prisma, type ${capModule} } from '@/configs/prisma.gen';
+            content: `import { prisma, type Prisma, type ${capModule} } from '@/configs/prisma';
 import { ErrorWithStatus } from '${baseAlias}/errors/ErrorWithStatus';
 import type { Update${capModule} } from '@/modules/${moduleName}/${moduleName}.types';
 import type { TQueries } from '${baseAlias}/types';
@@ -111,7 +111,7 @@ class ${capModule}Services {
      * @returns Created new ${moduleName}.
      */
     async create${capModule}InDB(payload: Prisma.${capModule}CreateInput) {
-        const [${moduleName}] = await prisma.${moduleName}.create({ data: payload });
+        const ${moduleName} = await prisma.${moduleName}.create({ data: payload });
 
 		if (!${moduleName}) {
 			throw new ErrorWithStatus(
@@ -232,9 +232,9 @@ export const ${moduleName}Validations = { creationSchema, updateSchema };
         // ! module.types.ts
         {
             name: `${moduleName}.types.ts`,
-            content: `import type { Prisma, ${capModule} } from '@/configs/prisma.gen';
+            content: `import type { Prisma } from '@/configs/prisma';
 
-export type Update${capModule} = Prisma.${capModule}CreateInput;
+export type Update${capModule} = Partial<Prisma.${capModule}CreateInput>;
             `,
         },
     ];

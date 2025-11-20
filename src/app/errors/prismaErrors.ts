@@ -10,7 +10,7 @@ export function handlePrismaError(error: PrismaError): IErrorResponse {
 
 	const { modelName = '', driverAdapterError: target = {} } = error?.meta ?? {};
 
-	const targetPath = target?.cause?.constraint.fields.join('.') ?? 'unknown';
+	const targetPath = target?.cause?.constraint?.fields.join('.') ?? 'unknown';
 
 	switch (error.code) {
 		case 'P2002':

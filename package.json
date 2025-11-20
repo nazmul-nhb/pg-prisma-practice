@@ -1,6 +1,6 @@
 {
   "name": "pg-prisma-practice",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
@@ -22,7 +22,8 @@
   },
   "author": {
     "name": "Nazmul Hassan",
-    "email": "nazmulnhb@gmail.com"
+    "email": "nazmulnhb@gmail.com",
+    "url": "https://nazmul-nhb.dev"
   },
   "license": "ISC",
   "keywords": [
@@ -75,6 +76,7 @@
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.47.0"
   },

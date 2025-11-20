@@ -11,10 +11,10 @@ export interface PrismaError extends Error {
 		modelName?: LooseLiteral<TCollection>;
 		driverAdapterError?: {
 			cause?: {
-				originalCode: string;
-				originalMessage: string;
-				kind: string;
-				constraint: { fields: string[] };
+				originalCode?: string;
+				originalMessage?: string;
+				kind?: string;
+				constraint?: { fields: string[] };
 			};
 		};
 	};
