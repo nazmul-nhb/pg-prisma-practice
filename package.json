@@ -1,6 +1,6 @@
 {
   "name": "pg-prisma-practice",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
@@ -9,6 +9,7 @@
     "build": "nhb-build",
     "build:gen": "prisma generate && nhb-build",
     "migrate": "prisma migrate dev",
+    "reset": "prisma migrate reset",
     "gen": "prisma generate",
     "studio": "prisma studio",
     "format": "nhb-format",
@@ -70,7 +71,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.5.0",
-    "nhb-scripts": "^1.8.86",
+    "nhb-scripts": "^1.8.88",
     "nodemon": "^3.1.11",
     "prettier": "^3.6.2",
     "prisma": "^7.0.0",

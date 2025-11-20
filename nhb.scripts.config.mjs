@@ -1,8 +1,9 @@
 // @ts-check
 
-import { defineScriptConfig, runExeca, updateCollection, updateRoutes } from 'nhb-scripts';
+import { defineScriptConfig, runExeca } from 'nhb-scripts';
 import { expressPrismaPostgresTemplate } from './scripts/moduleTemplate.mjs';
 import { updatePrismaSchema } from './scripts/updateSchema.mjs';
+import { updateCollection, updateRoutes } from './scripts/updateTemplate.mjs';
 
 export default defineScriptConfig({
 	format: {
@@ -20,6 +21,7 @@ export default defineScriptConfig({
 	build: {
 		distFolder: 'dist',
 		commands: [{ cmd: 'tsc' }, { cmd: 'tsc-alias' }],
+		waitingMessage: ' 📦 Building Your Express Application...',
 	},
 	count: {
 		defaultPath: 'src',

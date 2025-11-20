@@ -111,9 +111,9 @@ class ${capModule}Services {
      * @returns Created new ${moduleName}.
      */
     async create${capModule}InDB(payload: Prisma.${capModule}CreateInput) {
-        const ${moduleName} = await prisma.${moduleName}.create({ data: payload });
+        const new${capModule} = await prisma.${moduleName}.create({ data: payload });
 
-		if (!${moduleName}) {
+		if (!new${capModule}) {
 			throw new ErrorWithStatus(
 				'Creation Error',
 				'Cannot create ${moduleName} right now! Please try again later!',
@@ -122,7 +122,7 @@ class ${capModule}Services {
 			);
 		}
 
-        return ${moduleName};
+        return new${capModule};
     }
     
     /**
@@ -145,9 +145,9 @@ class ${capModule}Services {
      * @returns The matched ${moduleName} against the provided id.
      */
     async get${capModule}ByIdFromDB(id: number) {
-        const ${moduleName} = await prisma.${moduleName}.findUnique({ where: { id } });
+        const ${moduleName}_1 = await prisma.${moduleName}.findUnique({ where: { id } });
 
-        if (!${moduleName}) {
+        if (!${moduleName}_1) {
             throw new ErrorWithStatus(
                 'Not Found Error',
                 \`${capModule} not found with id \${id}!\`,
@@ -156,7 +156,7 @@ class ${capModule}Services {
             );
         }
 
-        return ${moduleName};
+        return ${moduleName}_1;
     }
 
     /**
