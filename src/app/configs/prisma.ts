@@ -1,5 +1,9 @@
-import { Stylog } from 'nhb-toolbox/stylog';
 import { PrismaClient } from '../../../generated/prisma';
+import { Stylog } from 'nhb-toolbox/stylog';
+import { PrismaPg } from '@prisma/adapter-pg';
+import configs from '@/configs';
+
+const pgAdapter = new PrismaPg({ connectionString: configs.databaseUrl });
 
 /**
  * ##  Prisma Client ʲˢ
@@ -15,10 +19,9 @@ import { PrismaClient } from '../../../generated/prisma';
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 export const prisma = new PrismaClient({
-	log: [
-		{ emit: 'event', level: 'query' },
-		{ emit: 'event', level: 'error' },
-	],
+	adapter: pgAdapter,
+	errorFormat: 'colorless',
+	log: [{ emit: 'event', level: 'error' }],
 });
 
 prisma.$on('error', (event) => {
@@ -26,8 +29,4 @@ prisma.$on('error', (event) => {
 });
 
 // ! Export everything from Prisma CLient
-export * from '../../../generated/prisma/client';
-export * from '../../../generated/prisma/default';
-export * from '../../../generated/prisma/edge';
 export * from '../../../generated/prisma/index';
-export * from '../../../generated/prisma/wasm';

@@ -1,4 +1,4 @@
-import { type Prisma, prisma } from '@/configs/prisma.gen';
+import { type Prisma, prisma } from '@/configs/prisma';
 import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import type { TPlainUser, UpdateUser } from '@/modules/user/user.types';
 import { findUserByEmail } from '@/modules/user/user.utils';

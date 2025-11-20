@@ -1,7 +1,6 @@
 import { errorGuard } from '@/errors/ErrorGuard';
 import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import { genericErrors } from '@/errors/genericErrors';
-import { handlePrismaError } from '@/errors/prismaErrors';
 import { handleZodErrors } from '@/errors/zodErrors';
 import type { IErrorResponse } from '@/types/interfaces';
 import { HTTP_STATUS } from 'nhb-toolbox/constants';
@@ -13,13 +12,11 @@ import { ZodError } from 'zod';
  * @returns Processed & structured `Error Response`.
  */
 const processErrors = (error: unknown): IErrorResponse => {
-	const stack = error instanceof Error ? error.stack : 'Stack Not Available!';
+	const stack = error instanceof Error ? error?.stack : 'Stack Not Available!';
 
 	// Zod Validation Error
 	if (error instanceof ZodError) {
 		return handleZodErrors(error, stack);
-	} else if (errorGuard.isPrismaError(error)) {
-		return handlePrismaError(error);
 	}
 	// Express Body Parser Error
 	else if (errorGuard.isParserError(error)) {

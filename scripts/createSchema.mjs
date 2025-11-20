@@ -12,7 +12,7 @@ export function createPrismaPostgresSchema(schemaName) {
 
     return [
         {
-            name: `${pluralSchema}.ts`,
+            name: `schema.prisma`,
             content: `import { pgTable, serial, timestamp } from 'prisma-orm/pg-core';
 
 export const ${pluralSchema} = pgTable('${pluralSchema}', {

@@ -1,13 +1,24 @@
-import type { TEmail, TStatusCode, TUserRole } from '@/types';
+import type { PrismaErrorCodes, TCollection, TEmail, TStatusCode, TUserRole } from '@/types';
 import type { Router } from 'express';
 import type { JwtPayload } from 'jsonwebtoken';
-import type { StrictObject } from 'nhb-toolbox/object/types';
 import type { LooseLiteral } from 'nhb-toolbox/utils/types';
 import type Mail from 'nodemailer/lib/mailer';
 
-export interface PrismaErrorMeta extends StrictObject {
-	modelName: string;
-	target: string[];
+export interface PrismaError extends Error {
+	message: string;
+	code: PrismaErrorCodes;
+	meta?: {
+		modelName?: LooseLiteral<TCollection>;
+		driverAdapterError?: {
+			cause?: {
+				originalCode: string;
+				originalMessage: string;
+				kind: string;
+				constraint: { fields: string[] };
+			};
+		};
+	};
+	clientVersion: string;
 }
 
 export interface IParserError {

@@ -1,5 +1,5 @@
 import configs from '@/configs';
-import { prisma } from '@/configs/prisma.gen';
+import { prisma } from '@/configs/prisma';
 import { processLogin } from '@/modules/auth/auth.utils';
 import type { InsertUser, TLoginCredentials } from '@/modules/user/user.types';
 import { findUserByEmail } from '@/modules/user/user.utils';

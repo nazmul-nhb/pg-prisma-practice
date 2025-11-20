@@ -1,6 +1,6 @@
 {
   "name": "pg-prisma-practice",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Express TypeScript Prisma (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
@@ -33,7 +33,8 @@
     "prisma"
   ],
   "dependencies": {
-    "@prisma/client": "6.19.0",
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "7.0.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",
     "cookie-parser": "^1.4.7",
@@ -44,6 +45,7 @@
     "multer": "^2.0.2",
     "nhb-toolbox": "^4.26.69",
     "nodemailer": "^7.0.10",
+    "pg": "^8.16.3",
     "serve-favicon": "^2.5.1",
     "zod": "^4.1.12"
   },
@@ -58,6 +60,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^24.10.1",
     "@types/nodemailer": "^7.0.4",
+    "@types/pg": "^8.15.6",
     "@types/serve-favicon": "^2.5.7",
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.47.0",
@@ -68,7 +71,7 @@
     "nhb-scripts": "^1.8.86",
     "nodemon": "^3.1.11",
     "prettier": "^3.6.2",
-    "prisma": "^6.19.0",
+    "prisma": "^7.0.0",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",

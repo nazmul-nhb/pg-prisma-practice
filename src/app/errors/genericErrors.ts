@@ -1,4 +1,6 @@
+import { errorGuard } from '@/errors/ErrorGuard';
 import type { ErrorWithStatus } from '@/errors/ErrorWithStatus';
+import { handlePrismaError } from '@/errors/prismaErrors';
 import type { IErrorResponse, IParserError } from '@/types/interfaces';
 import { HTTP_STATUS } from 'nhb-toolbox/constants';
 
@@ -22,6 +24,11 @@ export const handleErrorWithStatus = (
 
 /** * Processes general Error objects. */
 export const handleGenericError = (error: Error, stack?: string): IErrorResponse => {
+	// ! Temporary fix for Prisma errors
+	if (errorGuard.isPrismaError(error)) {
+		return handlePrismaError(error);
+	}
+
 	return {
 		statusCode: HTTP_STATUS.INTERNAL_SERVER_ERROR,
 		name: error.name || 'Unexpected Error!',

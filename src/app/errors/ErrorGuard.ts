@@ -1,5 +1,4 @@
-import type { PrismaError } from '@/types';
-import type { IParserError } from '@/types/interfaces';
+import type { IParserError, PrismaError } from '@/types/interfaces';
 import { isObjectWithKeys, isString } from 'nhb-toolbox';
 
 class ErrorGuard {
@@ -13,9 +12,9 @@ class ErrorGuard {
 	}
 
 	/** * Type guard to check if an error is `PrismaError` */
-	isPrismaError(error: unknown): error is PrismaError {
+	isPrismaError(error: Error): error is PrismaError {
 		return (
-			isObjectWithKeys(error, ['code']) &&
+			isObjectWithKeys(error, ['code', 'meta']) &&
 			isString(error.code) &&
 			error.code.startsWith('P')
 		);

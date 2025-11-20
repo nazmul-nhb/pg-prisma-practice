@@ -1,5 +1,5 @@
+import type { User } from '@/configs/prisma';
 import type { TEmail } from '@/types';
-import type { User } from '@/configs/prisma.gen';
 import type { Prettify } from 'nhb-toolbox/utils/types';
 
 type Email = { email: TEmail };
